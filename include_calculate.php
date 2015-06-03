@@ -69,8 +69,71 @@ function wxy($pp)
 	return(array($tx, $ty));
 }
 
+function ptime($n, $cx, $cy)
+{
+    global $PP;
 
-function route($pp, $sx, $sy, $tcheck)
+    list($x, $y, $min) = $PP[$n];
+    return($min + xdist($cx, $cy, $x, $y));
+}
+
+function rtime($pp)
+{
+    $cx = $cy = -1;
+    foreach($pp as $n => $xx)
+    {
+	list($x, $y, $min) = $xx;
+	if($cx >= 0)
+	    $d = xdist($cx, $cy, $x, $y);
+	else
+	    $d = 0;
+	$t += $min + $d;
+	$cx = $x;
+	$cy = $y;
+    }
+    return($t);
+}
+
+function get_closest($pp, $cx, $cy, $tcheck)
+{
+    return(get_extreme($pp, $cx, $cy, $tcheck, 0));
+}
+
+function get_farthest($pp, $cx, $cy, $tcheck)
+{
+    return(get_extreme($pp, $cx, $cy, $tcheck, 1));
+}
+
+function get_extreme($pp, $cx, $cy, $tcheck, $far)
+{
+    $bt = $bd = $bn = $bx = $by = $bmin = -1;
+    foreach($pp as $n => $xx)
+    {
+	list($x, $y, $min) = $xx;
+	$d = xdist($cx, $cy, $x, $y);
+	$t = $d + ($tcheck ? $min : 0);
+	if($far)
+	{
+	    if($bt >= 0 && $t < $bt)
+		continue;
+	}
+	else
+	{
+	    if($bt >= 0 && $t > $bt)
+		continue;
+	}
+	$bt = $t;
+	$bn = $n;
+	$bd = $d;
+	$bx = $x;
+	$by = $y;
+	$bmin = $min;
+    }
+    return(array($bn, array($bx, $by, $bt, $bd, $bmin)));
+}
+
+
+function croute($pp, $sx, $sy, $tcheck)
 {
 	global $DAYS;
 	
@@ -81,6 +144,16 @@ function route($pp, $sx, $sy, $tcheck)
 	$cy = $sy;
 	while(count($rr) < $hmh)
 	{
+		list($bn, $xx) = get_closest($pp, $cx, $cy, $tcheck);
+		list($bx, $by, $bt, $bd, $bmin) = $xx;
+		$cx = $bx;
+		$cy = $by;
+		$time += $bt;
+		$rr[$bn] = array($bx, $by, $bt, $bd, $bmin);
+		unset($pp[$bn]);
+		continue;
+
+
 		$bt = $bd = $bn = -1;
 		foreach($pp as $n => $xx)
 		{
@@ -90,7 +163,6 @@ function route($pp, $sx, $sy, $tcheck)
 			$t = $d + ($tcheck ? $min : 0);
 			if($bt >= 0 && $t > $bt)
 				continue;
-#print("$n $x/$y/$min\n");
 			$bd = $d;
 			$bt = $t;
 			$bn = $n;

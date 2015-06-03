@@ -2,6 +2,12 @@
 
 include_once("extern.php");
 myheader();
+
+foreach($A2N as $a => $name)
+{
+    $aopts .= "<option value=$a>$name";
+}
+
 print <<<EOF
 <table>
 <form action='go.php' target='GOFR' method=post
@@ -40,6 +46,17 @@ Minutes per cell
 </td>
 <td>
 <input name='CELLTIME' value='$CELLTIME'>
+</td>
+</tr>
+
+<tr>
+<td>
+Method
+</td>
+<td>
+<select name='METHOD' onchange='this.form.submit()'>
+$aopts
+</select>
 </td>
 </tr>
 

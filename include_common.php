@@ -206,3 +206,13 @@ function strclean($val)
     return($val);
 }
 
+function html_dump()
+{
+    print("<pre>");
+    for($n = 0; $n < func_num_args(); $n++)
+    {
+	$data = func_get_arg($n);
+	is_array($data) ? print_r($data) : print("$data\n");
+    }
+    print("</pre>");
+}
