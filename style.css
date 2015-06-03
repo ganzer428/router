@@ -1,0 +1,45 @@
+body, td, tr, a, span, input, textarea, th, option, select, div{
+font: 11px Tahoma, Geneva, sans-serif ;
+color: black;
+line-height: 12px;
+}
+
+a:link {
+    text-decoration: none;
+}
+
+a:visited {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a:active {
+    text-decoration: underline;
+}
+
+.red, .green, .fat {
+font: 24px Tahoma, Geneva, sans-serif ;
+font-weight: bold;
+}
+
+.red2, .green2, .fat2 {
+font: 28px Tahoma, Geneva, sans-serif ;
+font-weight: bold;
+}
+
+.red, .red2 {
+color: red;
+}
+.green. .green2 {
+color: green;
+}
+
+td {
+font-size: 10px;
+line-height: 10px;
+width: 25px;
+height: 25px;
+}
